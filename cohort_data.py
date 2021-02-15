@@ -115,9 +115,37 @@ def all_names_by_house(filename):
     ghosts = []
     instructors = []
 
-    # TODO: replace this with your code
+    rosters = [dumbledores_army, gryffindor, hufflepuff, ravenclaw, slytherin, ghosts, instructors]
 
-    return []
+    file = open(filename)
+
+    for line in file:
+      data = line.rstrip().split('|')
+
+      fname = data[0]
+      lname = data[1]
+      house = data[2]
+      cohort = data[4]
+    
+      if house == "Dumbledore's Army":
+        dumbledores_army.append(f'{fname} {lname}')
+      elif house == "Gryffindor":
+        gryffindor.append(f'{fname} {lname}')
+      elif house == "Hufflepuff":
+        hufflepuff.append(f'{fname} {lname}')
+      elif house == "Ravenclaw":
+        ravenclaw.append(f'{fname} {lname}')
+      elif house == "Slytherin":
+        slytherin.append(f'{fname} {lname}')
+      elif cohort == "G":
+        ghosts.append(f'{fname} {lname}')
+      elif cohort == "I":
+        instructors.append(f'{fname} {lname}')
+ 
+    for item in rosters:
+          item.sort()
+ 
+    return rosters
 
 
 def all_data(filename):
