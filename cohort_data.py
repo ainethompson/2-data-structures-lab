@@ -122,25 +122,22 @@ def all_names_by_house(filename):
     for line in file:
       data = line.rstrip().split('|')
 
-      fname = data[0]
-      lname = data[1]
-      house = data[2]
-      cohort = data[4]
+      full_name, house, advisor, cohort = f"{data[0]} {data[1]}", data[2], data[3], data[4]
     
       if house == "Dumbledore's Army":
-        dumbledores_army.append(f'{fname} {lname}')
+        dumbledores_army.append(full_name)
       elif house == "Gryffindor":
-        gryffindor.append(f'{fname} {lname}')
+        gryffindor.append(full_name)
       elif house == "Hufflepuff":
-        hufflepuff.append(f'{fname} {lname}')
+        hufflepuff.append(full_name)
       elif house == "Ravenclaw":
-        ravenclaw.append(f'{fname} {lname}')
+        ravenclaw.append(full_name)
       elif house == "Slytherin":
-        slytherin.append(f'{fname} {lname}')
+        slytherin.append(full_name)
       elif cohort == "G":
-        ghosts.append(f'{fname} {lname}')
+        ghosts.append(full_name)
       elif cohort == "I":
-        instructors.append(f'{fname} {lname}')
+        instructors.append(full_name)
  
     for item in rosters:
           item.sort()
@@ -162,14 +159,23 @@ def all_data(filename):
 
     Arguments:
       - filename (str): the path to a data file
-
+      
     Return:
       - list[tuple]: a list of tuples
     """
 
     all_data = []
 
-    # TODO: replace this with your code
+    file =  open(filename)
+
+    for line in file:
+      data = line.rstrip().split('|')
+
+      full_name, house, advisor, cohort = f"{data[0]} {data[1]}", data[2], data[3], data[4]
+
+      my_tuple = (full_name, house, advisor, cohort)
+
+      all_data.append(my_tuple)
 
     return all_data
 
