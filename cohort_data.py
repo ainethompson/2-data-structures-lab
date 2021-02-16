@@ -24,9 +24,6 @@ def all_houses(filename):
       if house:
         houses.add(house)
 
-      # if len(house) > 0 and house not in houses:
-      #   houses.add(house)
-
     return houses
 
 
@@ -67,12 +64,8 @@ def students_by_cohort(filename, cohort='All'):
 
       full_name, group = f"{data[0]} {data[1]}", data[4]
    
-      
-      if len(group) > 1:
-        if cohort == group:
-          students.append(full_name)
-        if cohort == 'All':
-          students.append(full_name)
+      if group not in ('I', 'G') and cohort in ('All', group):
+        students.append(full_name)
 
     return sorted(students)
 
@@ -124,7 +117,7 @@ def all_names_by_house(filename):
       data = line.rstrip().split('|')
 
       full_name, house, advisor, cohort = f"{data[0]} {data[1]}", data[2], data[3], data[4]
-    
+
       if house == "Dumbledore's Army":
         dumbledores_army.append(full_name)
       elif house == "Gryffindor":
@@ -173,7 +166,6 @@ def all_data(filename):
       data = line.rstrip().split('|')
 
       full_name, house, advisor, cohort = f"{data[0]} {data[1]}", data[2], data[3], data[4]
-
       my_tuple = (full_name, house, advisor, cohort)
 
       all_data.append(my_tuple)
@@ -201,15 +193,10 @@ def get_cohort_for(filename, name):
     Return:
       - str: the person's cohort or None
     """
-    file =  open(filename)
+    for full_name, _, _, cohort in all_data(filename):
+        if full_name == name:
+            return cohort
 
-    for line in file:
-      data = line.rstrip().split('|')
-
-      full_name, cohort = f"{data[0]} {data[1]}", data[4]
-
-      if full_name == name:
-        return cohort
 
 def find_duped_last_names(filename):
     """Return a set of duplicated last names that exist in the data.
@@ -226,18 +213,17 @@ def find_duped_last_names(filename):
     """
     file =  open(filename)
 
-    last_names = []
+    seen = set()
     dupes = set()
 
     for line in file:
-      data = line.rstrip().split('|')
+      lname = line.rstrip().split('|')[1]
 
-      lname = data[1]
-      if lname in last_names:
+      if lname in seen:
         dupes.add(lname)
-      else:
-        last_names.append(lname)
-  
+
+      seen.add(lname)
+
     return dupes
 
 
@@ -260,7 +246,6 @@ def get_housemates_for(filename, name):
           # if house same as chosen_house and cohort same as chosen_cohort:
           # add student full name to housemates set
 #     loop thru other students, add to set if same cohort and house
-# 
 
 #  what about students before given student in the file, loop back?
 
@@ -269,8 +254,7 @@ def get_housemates_for(filename, name):
     target_person = None
 
     for person in all_data(filename):
-
-      full_name, house, advisor, cohort_name = person
+      full_name, house, _, cohort_name = person
 
       if full_name == name:
         target_person = person
@@ -278,17 +262,11 @@ def get_housemates_for(filename, name):
 
     if target_person:
       target_name, target_house, _, target_cohort = target_person
-          
-      # for line in all_data(filename):
+
       for full_name, house, _, cohort_name in all_data(filename):
         if ((house, cohort_name) == (target_house, target_cohort) and
                   full_name != name):
           housemates.add(full_name)
-
-        # if full_name != name and house == chosen_house and cohort == chosen_cohort:
-        #   # print(full_name)
-        #   housemates.add(full_name)
-        
 
     return housemates
         
