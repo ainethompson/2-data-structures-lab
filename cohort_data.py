@@ -18,13 +18,14 @@ def all_houses(filename):
     houses = set()
     file = open(filename)
 
-    for line in file:
-          
-      data = line.split('|')
-      house = data[2]
-
-      if len(house) > 0 and house not in houses:
+    for line in file:  
+      house = line.split('|')[2]
+      
+      if house:
         houses.add(house)
+
+      # if len(house) > 0 and house not in houses:
+      #   houses.add(house)
 
     return houses
 
@@ -63,15 +64,15 @@ def students_by_cohort(filename, cohort='All'):
 
     for line in file:
       data = line.rstrip().split('|')
-      fname = data[0]
-      lname = data[1]
-      group = data[4]
+
+      full_name, group = f"{data[0]} {data[1]}", data[4]
+   
       
       if len(group) > 1:
         if cohort == group:
-          students.append(f'{fname} {lname}')
+          students.append(full_name)
         if cohort == 'All':
-          students.append(f'{fname} {lname}')
+          students.append(full_name)
 
     return sorted(students)
 
@@ -251,9 +252,46 @@ def get_housemates_for(filename, name):
     >>> get_housemates_for('cohort_data.txt', 'Hermione Granger')
     {'Angelina Johnson', ..., 'Seamus Finnigan'}
     """
+#     find given student info
+#     loop thru file
+#     if name same as given name, set house and cohort to variables
+#     
+#     For student in file:
+          # if house same as chosen_house and cohort same as chosen_cohort:
+          # add student full name to housemates set
+#     loop thru other students, add to set if same cohort and house
+# 
 
-    # TODO: replace this with your code
+#  what about students before given student in the file, loop back?
 
+    housemates = set()
+
+    target_person = None
+
+    for person in all_data(filename):
+
+      full_name, house, advisor, cohort_name = person
+
+      if full_name == name:
+        target_person = person
+        break
+
+    if target_person:
+      target_name, target_house, _, target_cohort = target_person
+          
+      # for line in all_data(filename):
+      for full_name, house, _, cohort_name in all_data(filename):
+        if ((house, cohort_name) == (target_house, target_cohort) and
+                  full_name != name):
+          housemates.add(full_name)
+
+        # if full_name != name and house == chosen_house and cohort == chosen_cohort:
+        #   # print(full_name)
+        #   housemates.add(full_name)
+        
+
+    return housemates
+        
 
 ##############################################################################
 # END OF MAIN EXERCISE.  Yay!  You did it! You Rock!
